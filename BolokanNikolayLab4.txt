@@ -1,0 +1,55 @@
+1. Отсортировать записи в таблице SPERSON в обратном  порядке  кодов офисов.
+Select *from Sperson
+Order by of_id desc
+
+2. Отсортировать записи в таблице SPERSON следующим образом:
+коды офисов установить в возрастающем порядке; 
+для одинаковых офисов фамилии сотрудников вывести в обратном алфавитном порядке.
+Select *from Sperson
+order by of_id,sp_name Desc
+go
+
+3. Посчитать количество сотрудников, работающих в каждом городе.
+Select o.of_id,o.office, count(*) qty
+from Office o,Sperson s
+where o.of_id=s.of_id
+group by o.office,o.of_id
+
+4. Определить максимальный и минимальный процент комиссионных сотрудников в каждом городе.
+Select o.of_id,o.office, max(s.comm) max_com, min(s.comm) min_com
+from Office o,Sperson s
+where o.of_id=s.of_id
+group by o.office,o.of_id
+order by 3
+
+5. Определить максимальный и минимальный процент 
+комиссионных сотрудников, работающих в Токио, Брюсселе и в Чикаго (Tokyo, Brussel, Chicago).
+Select o.of_id,o.office, max(s.comm) max_com, min(s.comm) min_com
+from Office o,Sperson s
+where o.of_id=s.of_id and o.office='Tokyo' or o.office='Bruxelles' or 
+o.office='Chicago'
+group by o.office,o.of_id
+order by 3
+
+6. Определить средний процент комиссионных для всех городов за исключением Токио (Tokyo).
+В результирующей таблице отобразить только те города, для которых средний процент комиссионных >11%.
+Select o.of_id,o.office, avg(s.comm) avg_com
+from Office o,Sperson s
+where o.of_id=s.of_id and o.office!='Tokyo'
+group by o.office,o.of_id
+having avg(s.comm) >11
+order by 2
+
+7. Определить среднюю, минимальную и максимальную закупочную стоимость Настольных ламп (Desc lamp).
+Select p.p_desc,avg(p.cost) avg ,max(p.cost) max,min(p.cost) min
+from Product p
+where p.p_desc='Desc lamp'
+group by p.p_desc
+
+8. Посчитать количество сотрудников, работающих в каждом городе. 
+В результирующей таблице отобразить только те города, в которых работает более двух сотрудников.
+Select o.office,count(*) qty
+from Office o, Sperson s
+where o.of_id=s.of_id
+group by o.office
+having count(*)>2
